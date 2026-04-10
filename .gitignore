@@ -23,3 +23,7 @@ secrets/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Ignore all build folders in any sub-directory
+**/target/
+**/*.class
