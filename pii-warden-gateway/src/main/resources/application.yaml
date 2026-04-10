@@ -1,3 +1,10 @@
 spring:
   application:
     name: pii-warden-gateway
+  cloud:
+    config:
+      enabled: false
+management:
+  health:
+    redis:
+      enabled: false
