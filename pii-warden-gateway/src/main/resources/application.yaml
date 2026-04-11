@@ -1,10 +1,48 @@
 spring:
   application:
     name: pii-warden-gateway
+
   cloud:
     config:
-      enabled: false
+      enabled: false          # disable config server for local dev
+    gateway:
+      mvc:
+        routes:
+          - id: user-route
+            uri: http://localhost:8081
+            predicates:
+              - Path=/api/users/**
+          - id: order-route
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/orders/**
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      connect-timeout: 2000
+
+  threads:
+    virtual:
+      enabled: true           # Java 21 Virtual Threads — critical
+
+server:
+  port: 8080
+
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health, refresh, metrics, info
   health:
     redis:
-      enabled: false
+      enabled: false          # keep false until Redis module is built (Day 15)
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG    # see all routing decisions
+    com.piiwarden: DEBUG                        # see your own filter logs
